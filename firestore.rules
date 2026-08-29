@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Global Helpers
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // Validation for UserDatabase
+    function isValidUserDatabase(data) {
+      return data.keys().hasAll(['dbState', 'lastUpdated', 'updatedBy']) &&
+             data.keys().size() <= 5 &&
+             data.dbState is map &&
+             data.lastUpdated is string && data.lastUpdated.size() <= 100 &&
+             data.updatedBy is string && data.updatedBy.size() <= 100;
+    }
+
+    // Validation for UserBackup
+    function isValidUserBackup(data, userId) {
+      return data.keys().hasAll(['id', 'userId', 'metadata', 'encryptedData', 'createdAt']) &&
+             data.keys().size() == 5 &&
+             data.id is string && data.id.size() <= 100 &&
+             data.userId == userId &&
+             data.metadata is map &&
+             data.encryptedData is string && data.encryptedData.size() <= 900000 &&
+             data.createdAt is string && data.createdAt.size() <= 50;
+    }
+
+    // 3. User Databases Collection
+    match /user_databases/{userId} {
+      allow get: if isSignedIn() && request.auth.uid == userId;
+      allow list: if false; // No list access
+      allow create: if isSignedIn() &&
+                    request.auth.uid == userId &&
+                    isValidUserDatabase(incoming());
+      allow update: if isSignedIn() &&
+                    request.auth.uid == userId &&
+                    isValidUserDatabase(incoming()) &&
+                    incoming().diff(existing()).affectedKeys().hasOnly(['dbState', 'lastUpdated', 'updatedBy']);
+      allow delete: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    // 4. User Backups Collection
+    match /user_backups/{userId}/backups_store/{backupId} {
+      allow get: if isSignedIn() && request.auth.uid == userId;
+      allow list: if isSignedIn() && request.auth.uid == userId; // Since backup items don't exist yet in list queries, the path variable enforces access
+      allow create: if isSignedIn() &&
+                    request.auth.uid == userId &&
+                    isValidId(backupId) &&
+                    isValidUserBackup(incoming(), userId);
+      allow update: if false; // Backups are immutable
+      allow delete: if isSignedIn() && request.auth.uid == userId;
+    }
+  }
+}

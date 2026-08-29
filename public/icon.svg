@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2005/2006/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Beautiful rich gradient combinations -->
+    <linearGradient id="primary-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" /> <!-- Indigo 605 -->
+      <stop offset="100%" stop-color="#0284c7" /> <!-- Sky 600 -->
+    </linearGradient>
+    <linearGradient id="gold-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ea580c" /> <!-- Orange 600 -->
+      <stop offset="50%" stop-color="#f59e0b" /> <!-- Amber 500 -->
+      <stop offset="100%" stop-color="#fef08a" /> <!-- Yellow 200 -->
+    </linearGradient>
+    <radialGradient id="bg-grad" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#1e293b" /> <!-- Slate 800 -->
+      <stop offset="100%" stop-color="#0f172a" /> <!-- Slate 900 -->
+    </radialGradient>
+    <filter id="soft-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.3" />
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Solid rounded-3xl premium background -->
+  <rect width="512" height="512" rx="128" fill="url(#bg-grad)" />
+
+  <!-- Abstract visual accounting graphs and curves representing growth & ledger checks -->
+  <g transform="translate(256, 256)">
+    <!-- Glowing background aura -->
+    <circle r="180" fill="none" stroke="url(#primary-grad)" stroke-width="2" opacity="0.15" />
+
+    <!-- Outer thin dashed regulatory orbit -->
+    <circle r="160" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="8 8" opacity="0.4" />
+
+    <!-- Isometric growth pillar 1: Left column -->
+    <rect x="-80" y="20" width="30" height="60" rx="6" fill="url(#primary-grad)" opacity="0.7" />
+
+    <!-- Isometric growth pillar 2: Middle column -->
+    <rect x="-35" y="-15" width="30" height="95" rx="6" fill="url(#primary-grad)" opacity="0.9" />
+
+    <!-- Isometric growth pillar 3: Right column (Golden Pillar) -->
+    <rect x="10" y="-60" width="30" height="140" rx="6" fill="url(#gold-grad)" filter="url(#soft-glow)" />
+
+    <!-- Elegant curved ribbon connecting pillars (resembling an 'A' for ANAS) -->
+    <path d="M-110,60 C-110,-40 -20,-110 50,-110 C90,-110 110,-90 110,-70 C110,-40 20,40 -60,60"
+          fill="none" stroke="url(#gold-grad)" stroke-width="12" stroke-linecap="round" filter="url(#soft-glow)" />
+
+    <!-- Arrow or peak of the "A" indicating upwards and rightward growth -->
+    <path d="M50,-110 L30,-125 L35,-105 Z" fill="url(#gold-grad)" transform="rotate(35 50 -110)" />
+
+    <!-- Ledger double checkmark (Symbol of precision, accuracy, audited status) -->
+    <g transform="translate(90, 40) scale(1.3)">
+      <circle r="22" fill="#0f172a" stroke="url(#primary-grad)" stroke-width="3" />
+      <path d="M-8,1 L-2,7 L8,-5" fill="none" stroke="url(#gold-grad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </g>
+</svg>

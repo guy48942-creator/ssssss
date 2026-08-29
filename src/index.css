@@ -1,0 +1,378 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Cairo", "Inter", system-ui, sans-serif;
+}
+
+
+/* Premium 3D design foundation */
+:root {
+  --ui-bg: #f8fafc;
+  --ui-surface: rgba(255, 255, 255, 0.78);
+  --ui-border: rgba(148, 163, 184, 0.22);
+  --ui-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  --ui-depth: 0 1px 0 rgba(255,255,255,.9) inset, 0 14px 30px rgba(15,23,42,.07);
+}
+
+html, body, #root {
+  min-height: 100%;
+}
+
+body {
+  background: var(--ui-bg);
+  overflow-x: hidden;
+}
+
+.app-shell-3d {
+  isolation: isolate;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+}
+
+.surface-3d {
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border);
+  box-shadow: var(--ui-depth);
+  backdrop-filter: blur(18px) saturate(130%);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+}
+
+.depth-panel-3d {
+  transform: translateZ(0);
+  box-shadow: 0 20px 45px rgba(15,23,42,.09), 0 2px 0 rgba(255,255,255,.7) inset;
+  transition: transform .28s cubic-bezier(.16,1,.3,1), box-shadow .28s ease;
+}
+
+.depth-panel-3d:hover {
+  transform: translateY(-2px) translateZ(8px);
+  box-shadow: 0 28px 60px rgba(15,23,42,.13), 0 2px 0 rgba(255,255,255,.85) inset;
+}
+
+.dark {
+  --ui-bg: #020617;
+  --ui-surface: rgba(15, 23, 42, 0.72);
+  --ui-border: rgba(148, 163, 184, 0.16);
+  --ui-shadow: 0 18px 50px rgba(0,0,0,.28);
+  --ui-depth: 0 1px 0 rgba(255,255,255,.06) inset, 0 18px 42px rgba(0,0,0,.25);
+}
+
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.safe-top {
+  padding-top: max(0.5rem, env(safe-area-inset-top));
+}
+
+@media (max-width: 767px) {
+  .surface-3d, .depth-panel-3d {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .depth-panel-3d:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .depth-panel-3d:hover, .card-3d:hover {
+    transform: none !important;
+  }
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans), sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body, button, input, select, textarea {
+    font-family: var(--font-sans), sans-serif;
+  }
+
+  select {
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+/* Beautiful micro-interactions and animations */
+.interactive-tap {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.interactive-tap:active {
+  transform: scale(0.96);
+}
+
+.icon-bounce {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.interactive-hover-group:hover .icon-bounce {
+  transform: scale(1.15) rotate(3deg);
+}
+
+
+/* Print modifications */
+@media print {
+  html, body, #root {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background-color: white !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+    direction: rtl !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  @page {
+    margin: 8mm 10mm 8mm 10mm;
+    size: A4 portrait;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only,
+  div.print-only,
+  section.print-only,
+  #root .print-only {
+    display: block !important;
+  }
+
+  /* Support printing directly from the modal overlays */
+  .h-screen, .min-h-screen, .overflow-hidden, .overflow-y-auto, .overflow-x-auto, .flex-1, main, #smartacc_main_view {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .print-modal-overlay {
+    position: relative !important;
+    inset: auto !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .print-modal-content {
+    background: transparent !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+    box-shadow: none !important;
+  }
+
+  .print-modal-content > div {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+  }
+
+  .print-card {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .print-document {
+    min-width: 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    min-height: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    transform: none !important;
+  }
+
+  .print-border-wrapper {
+    min-height: auto !important;
+    height: auto !important;
+    border-width: 2px !important;
+    padding: 2mm !important;
+  }
+
+  table {
+    page-break-inside: auto;
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  thead {
+    display: table-header-group !important;
+  }
+
+  /* Enhance table header visibility in print */
+  thead th {
+    background-color: #e2e8f0 !important; /* Slate 200 for good contrast on paper */
+    color: #0f172a !important; /* Very dark slate text */
+    border-bottom: 2px solid #94a3b8 !important; /* Slate 400 */
+    font-weight: bold !important;
+  }
+
+  /* Zebra striping specifically optimized for print */
+  tbody tr:nth-child(even) td {
+    background-color: #f8fafc !important; /* Slate 50 - subtle but visible */
+  }
+
+  tbody tr:nth-child(odd) td {
+    background-color: #ffffff !important; /* Pure white */
+  }
+
+  th {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    border: 1px solid #cbd5e1 !important; /* Slate 300 */
+  }
+
+  td {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    border: 1px solid #cbd5e1 !important; /* Slate 300 */
+    color: #1e293b !important; /* Enforce dark text, override any dark mode light text */
+  }
+
+  /* Convert dark background utilities to print-friendly grayscale */
+  .bg-slate-900, .bg-slate-800, .bg-slate-700, .dark .bg-slate-900, .dark .bg-slate-800 {
+    background-color: transparent !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+  }
+
+  /* Ensure badges and colored status indicators print as distinct light grayscales/outlines */
+  .text-emerald-500, .text-emerald-600, .text-emerald-400 {
+    color: #0f766e !important; /* Teal 700 - prints darker */
+  }
+  .bg-emerald-500\/10, .bg-emerald-500\/20, .dark .bg-emerald-500\/20 {
+    background-color: #f0fdf4 !important; /* Green 50 */
+    border: 1px solid #86efac !important; /* Green 300 */
+  }
+
+  .text-rose-500, .text-rose-600, .text-rose-400 {
+    color: #b91c1c !important; /* Red 700 */
+  }
+  .bg-rose-500\/10, .bg-rose-500\/20, .dark .bg-rose-500\/20 {
+    background-color: #fef2f2 !important; /* Red 50 */
+    border: 1px solid #fca5a5 !important; /* Red 300 */
+  }
+
+  .text-blue-500, .text-blue-600, .text-blue-400, .text-indigo-500, .text-indigo-400 {
+    color: #1d4ed8 !important; /* Blue 700 */
+  }
+  .bg-blue-500\/10, .bg-blue-500\/20, .dark .bg-blue-500\/20, .bg-indigo-500\/10, .bg-indigo-500\/20 {
+    background-color: #eff6ff !important; /* Blue 50 */
+    border: 1px solid #93c5fd !important; /* Blue 300 */
+  }
+
+  div, span, p, h1, h2, h3, h4, section {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* 3D Design System & Micro-Depth Utility Classes */
+.card-3d {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.85));
+  box-shadow:
+    0 10px 25px -5px rgba(15, 23, 42, 0.05),
+    0 8px 10px -6px rgba(15, 23, 42, 0.03),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  backdrop-filter: blur(12px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .card-3d {
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.8));
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.3),
+    0 8px 10px -6px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+}
+
+.card-3d:hover {
+  transform: translateY(-3px) scale(1.005);
+  box-shadow:
+    0 20px 30px -10px rgba(15, 23, 42, 0.1),
+    0 12px 15px -8px rgba(15, 23, 42, 0.06),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 1);
+}
+
+.dark .card-3d:hover {
+  box-shadow:
+    0 20px 35px -10px rgba(0, 0, 0, 0.5),
+    0 12px 15px -8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.shadow-3d-soft {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -2px rgba(0, 0, 0, 0.05),
+    0 10px 15px -3px rgba(37, 99, 235, 0.04);
+}
+
+.btn-3d {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.btn-3d:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.15);
+}
+
+/* Custom scrollbars for a clean look */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+}
