@@ -1,0 +1,62 @@
+{
+  "entities": {
+    "UserDatabase": {
+      "title": "User Database",
+      "description": "User's current state database snapshot",
+      "type": "object",
+      "properties": {
+        "dbState": {
+          "type": "object",
+          "description": "The exported DB state"
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "ISO timestamp of last update"
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "Client description"
+        }
+      },
+      "required": ["dbState", "lastUpdated", "updatedBy"]
+    },
+    "UserBackup": {
+      "title": "User Backup",
+      "description": "A single backup entry",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Backup ID"
+        },
+        "userId": {
+          "type": "string",
+          "description": "User ID owning the backup"
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Metadata for the backup"
+        },
+        "encryptedData": {
+          "type": "string",
+          "description": "AES encrypted JSON state"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp"
+        }
+      },
+      "required": ["id", "userId", "metadata", "encryptedData", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/user_databases/{userId}": {
+      "schema": { "$ref": "#/entities/UserDatabase" },
+      "description": "Stores user's synchronized app state"
+    },
+    "/user_backups/{userId}/backups_store/{backupId}": {
+      "schema": { "$ref": "#/entities/UserBackup" },
+      "description": "Stores encrypted backup snapshots"
+    }
+  }
+}

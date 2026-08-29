@@ -1,0 +1,6 @@
+{
+  "name": "نظام ANAS المحاسبي",
+  "description": "نظام محاسبي مبسط وسهل الاستخدام لإدارة المبيعات اليومية، حسابات الموردين والعملاء، وتتبع الذمم الدائنة والمدينة.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
